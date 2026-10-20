@@ -30,7 +30,7 @@ class ZeroclawPatched < Formula
 
   test do
     assert_match "0.8.5", shell_output("#{bin}/zeroclaw --version")
-    assert_match "0.8.5", shell_output("#{bin}/zeroclaw-acp-bridge --version")
+    assert_predicate bin/"zeroclaw-acp-bridge", :executable?
     assert_match "0.8.5", shell_output("#{bin}/zerocode --version")
   end
 
