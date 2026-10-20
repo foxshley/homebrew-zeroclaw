@@ -28,7 +28,7 @@ Leave `$(brew --prefix)/var/zeroclaw` untouched. The retained Core keg remains a
 
 ## Updating the installed package
 
-The formula is keg-only to keep the Core keg available. Homebrew retains the formula’s existing link state during upgrades. Update it with `brew upgrade foxshley/zeroclaw/zeroclaw-patched`, then restart its service with `brew services restart zeroclaw-patched`; an already-running daemon does not switch to the new binary automatically. Confirm the paths for `zeroclaw`, `zeroclaw-acp-bridge`, and `zerocode`, the `zeroclaw` and `zerocode` versions, that the ACP bridge executable exists, and `brew services list`. The ACP bridge `--version` option starts a pairing operation; do not use it as a version probe. Homebrew Core should stay pinned throughout; unpin it only for an intentional Core update or rollback.
+The formula is keg-only to keep the Core keg available. Homebrew retains the formula’s existing link state during upgrades. Update it with `brew upgrade foxshley/zeroclaw/zeroclaw-patched`, then restart its service with `brew services restart zeroclaw-patched`; an already-running daemon does not switch to the new binary automatically. Confirm the paths for `zeroclaw`, `zeroclaw-acp-bridge`, and `zerocode`, the `zeroclaw` and `zerocode` versions, that the ACP bridge executable exists, and `brew services list`. The ACP bridge does not support `--version`; invoking that flag attempts a pairing operation, so verify only that the binary is executable. Homebrew Core should stay pinned throughout; unpin it only for an intentional Core update or rollback.
 
 ## Updating the repair
 
