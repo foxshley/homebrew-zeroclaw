@@ -1,13 +1,13 @@
 class ZeroclawPatched < Formula
   desc "ZeroClaw with the Telegram reactions repair"
   homepage "https://github.com/foxshley/zeroclaw"
-  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/ff66e1ea60d61e64bdee38c9e1ee3af7bb9c7a9d"
-  sha256 "1b2a3e15707c508b5b3982395b5ec2d337957e7eb83db0c9f38edbefc770d013"
-  version "0.8.5"
+  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/67a340df78adb803316d835a9979300c59d22e95"
+  sha256 "7648babbd1b6717752ced105ca9e1974f40cdbdd1e47182da6c22647ca7bd76c"
+  version "0.8.6"
   license any_of: ["MIT", "Apache-2.0"]
 
   depends_on "rust" => :build
-  revision 1
+  depends_on "node" => :build
   keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
   def fetch
@@ -15,8 +15,12 @@ class ZeroclawPatched < Formula
   end
 
   def install
+    system "cargo", "web", "build"
     system "cargo", "install", *std_cargo_args
     system "cargo", "install", *std_cargo_args(path: "apps/zerocode")
+    dashboard = bin/"web"/"dist"
+    dashboard.mkpath
+    dashboard.install Dir["web/dist/*"]
   end
 
   service do
@@ -29,9 +33,9 @@ class ZeroclawPatched < Formula
   end
 
   test do
-    assert_match "0.8.5", shell_output("#{bin}/zeroclaw --version")
+    assert_match "0.8.6", shell_output("#{bin}/zeroclaw --version")
     assert_predicate bin/"zeroclaw-acp-bridge", :executable?
-    assert_match "0.8.5", shell_output("#{bin}/zerocode --version")
+    assert_match "0.8.6", shell_output("#{bin}/zerocode --version")
   end
 
   def caveats

@@ -1,6 +1,6 @@
 # Switching to `zeroclaw-patched`
 
-The formula installs the existing `zeroclaw` command and runs the existing ZeroClaw service against `$(brew --prefix)/var/zeroclaw`. That directory holds the live workspace, including configuration, credentials, agents, and memories. Keep it in place throughout the switch and rollback.
+The formula installs ZeroClaw v0.8.6, the existing `zeroclaw` command, and the matching web dashboard. It runs the service against `$(brew --prefix)/var/zeroclaw`. That directory holds the live workspace, including configuration, credentials, agents, and memories. Keep it in place throughout the switch and rollback.
 
 The formula is keg-only so the Homebrew Core keg can remain installed as a rollback target. Both kegs provide `zeroclaw`, `zeroclaw-acp-bridge`, and `zerocode`, so only one can be linked into the command path at a time.
 
@@ -32,4 +32,4 @@ The formula is keg-only to keep the Core keg available. Homebrew retains the for
 
 ## Updating the repair
 
-The formula pins an immutable source commit archive and SHA256. To update it, review and test the source change, calculate and verify the new archive SHA256, then update both the archive commit and `sha256` together. Keep the formula at version `0.8.5` with an incremented Homebrew `revision` while the upstream application version is unchanged; bump the formula version when upstream advances. Create the immutable source release tag after source review and tests. Promote a new tap formula revision only after package validation; do not use a moving branch as the formula source.
+The formula pins an immutable source commit archive and SHA256. To update it, review and test the source change, calculate and verify the new archive SHA256, then update both the archive commit and `sha256` together. Bump the formula version when upstream advances. The v0.8.6 formula also builds the web dashboard and installs it next to the binaries so the gateway and ZeroClaw Desktop use matching assets. Create the immutable source release tag after source review and tests. Promote a new tap formula revision only after package validation; do not use a moving branch as the formula source.
