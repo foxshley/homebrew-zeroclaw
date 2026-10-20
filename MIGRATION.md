@@ -9,10 +9,11 @@ The formula is keg-only so the Homebrew Core keg can remain installed as a rollb
 1. Record `brew services list` and `command -v zeroclaw`.
 2. Install the tap formula while Core is still running: `brew install foxshley/zeroclaw/zeroclaw-patched`. Keg-only installation does not link commands or start a service.
 3. Stop `zeroclaw` with `brew services stop zeroclaw` and confirm the daemon has exited.
-4. Unlink the Core formula with `brew unlink zeroclaw`. Keep its keg installed as the rollback target, and pin it with `brew pin zeroclaw` so a later Core upgrade does not replace the inactive rollback build.
+4. Unlink the Core formula with `brew unlink zeroclaw`. Keep its keg installed as the rollback target.
 5. Link the tap formula with `brew link --force zeroclaw-patched`.
 6. Confirm `zeroclaw --version` and run a harmless command against the existing workspace before starting the service.
 7. Start the service with `brew services start zeroclaw-patched`; confirm it is healthy and reads the existing workspace.
+8. After the switch is healthy, pin Core with `brew pin zeroclaw` to retain the rollback keg. Keep it pinned while the patched package is active; unpin only when intentionally updating Core or after rolling back.
 
 Do not run the Core and patched services at the same time. The launch agents use the same workspace and could contend for state. Keep the Core formula pinned while the patched package is active. To roll back, stop the patched service, unlink it, relink the retained Core keg, and start Core as described below.
 
@@ -27,8 +28,8 @@ Leave `$(brew --prefix)/var/zeroclaw` untouched. The retained Core keg remains a
 
 ## Updating the installed package
 
-The formula is keg-only to keep the Core keg available. After upgrading `zeroclaw-patched`, stop its service, relink the updated formula with `brew link --force zeroclaw-patched`, and start the service again. Confirm `command -v zeroclaw` and `zeroclaw --version` before relying on the new binary. Homebrew Core should stay pinned throughout; the tap package remains the package to update.
+The formula is keg-only to keep the Core keg available. Homebrew retains the formula’s existing link state during upgrades. Update it with `brew upgrade foxshley/zeroclaw/zeroclaw-patched`, then restart its service with `brew services restart zeroclaw-patched`; an already-running daemon does not switch to the new binary automatically. Confirm `command -v zeroclaw`, `command -v zeroclaw-acp-bridge`, `command -v zerocode`, their reported versions, and `brew services list`. Homebrew Core should stay pinned throughout; unpin it only for an intentional Core update or rollback.
 
 ## Updating the repair
 
-The formula pins an immutable source commit archive and SHA256. To update it, review the source change, calculate and verify the new archive SHA256, then update both the archive commit and `sha256` together. Keep the formula at version `0.8.5` with an incremented Homebrew `revision` while the upstream application version is unchanged. Create a new immutable release tag only after source review and package validation; do not use a moving branch as the formula source.
+The formula pins an immutable source commit archive and SHA256. To update it, review and test the source change, calculate and verify the new archive SHA256, then update both the archive commit and `sha256` together. Keep the formula at version `0.8.5` with an incremented Homebrew `revision` while the upstream application version is unchanged; bump the formula version when upstream advances. Create the immutable source release tag after source review and tests. Promote a new tap formula revision only after package validation; do not use a moving branch as the formula source.
