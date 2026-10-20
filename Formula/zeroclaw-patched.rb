@@ -1,9 +1,10 @@
 class ZeroclawPatched < Formula
-  desc "ZeroClaw with the Telegram reactions repair"
+  desc "ZeroClaw with Telegram reaction and static sticker repairs"
   homepage "https://github.com/foxshley/zeroclaw"
-  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/1c93db71f40af697335353a7237105728d111afc"
-  sha256 "2bbe5eb8bb7f70a0c84ec66f2489ebe1b39823a837f56458a6316f9e341b1cb9"
+  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/64eeebd092302095fe4b7f584296fbe88836d1fc"
+  sha256 "7a8333127c13407b678f55286dc49a7a094cc1680ff683f064db57a3890cc629"
   version "0.8.6"
+  revision 1
   license any_of: ["MIT", "Apache-2.0"]
 
   depends_on "rust" => :build
