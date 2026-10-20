@@ -1,13 +1,12 @@
 class ZeroclawPatched < Formula
   desc "ZeroClaw with the Telegram reactions repair"
   homepage "https://github.com/foxshley/zeroclaw"
-  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/67a340df78adb803316d835a9979300c59d22e95"
-  sha256 "7648babbd1b6717752ced105ca9e1974f40cdbdd1e47182da6c22647ca7bd76c"
+  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/1c93db71f40af697335353a7237105728d111afc"
+  sha256 "2bbe5eb8bb7f70a0c84ec66f2489ebe1b39823a837f56458a6316f9e341b1cb9"
   version "0.8.6"
   license any_of: ["MIT", "Apache-2.0"]
 
   depends_on "rust" => :build
-  depends_on "node" => :build
   keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
   def fetch
@@ -15,7 +14,6 @@ class ZeroclawPatched < Formula
   end
 
   def install
-    system "cargo", "web", "build"
     system "cargo", "install", *std_cargo_args
     system "cargo", "install", *std_cargo_args(path: "apps/zerocode")
     dashboard = bin/"web"/"dist"
