@@ -2,16 +2,17 @@
 
 The formula installs the existing `zeroclaw` command and runs the existing ZeroClaw service against `$(brew --prefix)/var/zeroclaw`. That directory holds the live workspace, including configuration, credentials, agents, and memories. Keep it in place throughout the switch and rollback.
 
-The formula is keg-only so the Homebrew Core keg can remain installed as a rollback target. Both kegs provide `zeroclaw`, so only one can be linked into the command path at a time.
+The formula is keg-only so the Homebrew Core keg can remain installed as a rollback target. Both kegs provide `zeroclaw`, `zeroclaw-acp-bridge`, and `zerocode`, so only one can be linked into the command path at a time.
 
 ## Before switching
 
 1. Record `brew services list` and `command -v zeroclaw`.
-2. Stop `zeroclaw` with `brew services stop zeroclaw` and confirm the daemon has exited.
-3. Unlink the Core formula with `brew unlink zeroclaw`. Keep its keg installed; it contains the currently working patched Core binary and remains the rollback target.
-4. Install the tap formula, then link its command with `brew link --force zeroclaw-patched`.
-5. Confirm `zeroclaw --version` and run a harmless command against the existing workspace before starting the service.
-6. Start the service with `brew services start zeroclaw-patched`; confirm it is healthy and reads the existing workspace.
+2. Install the tap formula while Core is still running: `brew install foxshley/zeroclaw/zeroclaw-patched`. Keg-only installation does not link commands or start a service.
+3. Stop `zeroclaw` with `brew services stop zeroclaw` and confirm the daemon has exited.
+4. Unlink the Core formula with `brew unlink zeroclaw`. Keep its keg installed as the rollback target.
+5. Link the tap formula with `brew link --force zeroclaw-patched`.
+6. Confirm `zeroclaw --version` and run a harmless command against the existing workspace before starting the service.
+7. Start the service with `brew services start zeroclaw-patched`; confirm it is healthy and reads the existing workspace.
 
 Do not run the Core and patched services at the same time. The launch agents use the same workspace and could contend for state.
 
@@ -22,4 +23,8 @@ Do not run the Core and patched services at the same time. The launch agents use
 3. Relink the still-installed Homebrew Core keg with `brew link --force zeroclaw`.
 4. Start the original service with `brew services start zeroclaw` and confirm it is healthy.
 
-Leave `$(brew --prefix)/var/zeroclaw` untouched. Do not restore the older stock binary backup from `local-fixes`; the retained Core keg contains the current working patched installation.
+Leave `$(brew --prefix)/var/zeroclaw` untouched. The retained Core keg remains available as the rollback target.
+
+## Updating the repair
+
+The formula pins an immutable source commit archive and SHA256. To update it, review the source change, calculate and verify the new archive SHA256, then update both the archive commit and `sha256` together. Keep the formula at version `0.8.5` with an incremented Homebrew `revision` while the upstream application version is unchanged. Create a new immutable release tag only after source review and package validation; do not use a moving branch as the formula source.
