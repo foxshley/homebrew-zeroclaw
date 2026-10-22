@@ -1,14 +1,15 @@
 class ZeroclawPatched < Formula
-  desc "ZeroClaw with Telegram reaction and static sticker repairs"
+  desc "ZeroClaw with Telegram and delegation prompt repairs"
   homepage "https://github.com/foxshley/zeroclaw"
-  url "https://codeload.github.com/foxshley/zeroclaw/tar.gz/64eeebd092302095fe4b7f584296fbe88836d1fc"
-  sha256 "7a8333127c13407b678f55286dc49a7a094cc1680ff683f064db57a3890cc629"
+  url "https://github.com/foxshley/zeroclaw/archive/e98f12c56fdb6cac4b8179c9540775e56a4cadf6.tar.gz"
   version "0.8.6"
-  revision 1
+  sha256 "6f7f72646e2a0998b76ab1df8a51b2e4cc8b3323f222cb4e3b06fc6146673e63"
   license any_of: ["MIT", "Apache-2.0"]
+  revision 2
+
+  keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
   depends_on "rust" => :build
-  keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
   def fetch
     system "cargo", "fetch", *std_cargo_fetch_args
@@ -31,12 +32,6 @@ class ZeroclawPatched < Formula
     error_log_path var/"log/zeroclaw-patched.log"
   end
 
-  test do
-    assert_match "0.8.6", shell_output("#{bin}/zeroclaw --version")
-    assert_predicate bin/"zeroclaw-acp-bridge", :executable?
-    assert_match "0.8.6", shell_output("#{bin}/zerocode --version")
-  end
-
   def caveats
     <<~EOS
       This package installs the `zeroclaw` command and shares #{var}/zeroclaw
@@ -51,5 +46,12 @@ class ZeroclawPatched < Formula
       relinking and starting the still-installed Homebrew Core formula. Keep
       #{var}/zeroclaw intact.
     EOS
+  end
+
+  test do
+    assert_match "0.8.6", shell_output("#{bin}/zeroclaw --version")
+    assert_predicate bin/"zeroclaw-acp-bridge", :executable?
+    assert_path_exists bin/"web/dist/index.html"
+    assert_match "0.8.6", shell_output("#{bin}/zerocode --version")
   end
 end

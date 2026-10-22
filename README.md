@@ -1,6 +1,6 @@
 # homebrew-zeroclaw
 
-Homebrew tap for `zeroclaw-patched`, built from the `foxshley/zeroclaw` fork at ZeroClaw v0.8.6 with Telegram reaction repairs and static sticker image input. The formula also includes and installs the matching web dashboard so ZeroClaw Desktop can load the gateway interface.
+Homebrew tap for `zeroclaw-patched`, built from the `foxshley/zeroclaw` fork at ZeroClaw v0.8.6 with Telegram reaction repairs, static sticker image input and isolated specialist delegation prompts. The formula also includes and installs the matching web dashboard so ZeroClaw Desktop can load the gateway interface.
 
 Install with:
 
