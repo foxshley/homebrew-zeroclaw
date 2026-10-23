@@ -1,11 +1,11 @@
 class ZeroclawPatched < Formula
   desc "ZeroClaw with Telegram and delegation prompt repairs"
   homepage "https://github.com/foxshley/zeroclaw"
-  url "https://github.com/foxshley/zeroclaw/archive/e98f12c56fdb6cac4b8179c9540775e56a4cadf6.tar.gz"
+  url "https://github.com/foxshley/zeroclaw/archive/51d88161badfc7aa2aca665f8870037ecb73d90a.tar.gz"
   version "0.8.6"
-  sha256 "6f7f72646e2a0998b76ab1df8a51b2e4cc8b3323f222cb4e3b06fc6146673e63"
+  sha256 "45453495ad2edbb917a20db9c58844249eb0948f2f2613f4795826be43829120"
   license any_of: ["MIT", "Apache-2.0"]
-  revision 2
+  revision 3
 
   keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
