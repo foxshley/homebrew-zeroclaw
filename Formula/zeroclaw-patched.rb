@@ -5,7 +5,7 @@ class ZeroclawPatched < Formula
   version "0.8.6"
   sha256 "45453495ad2edbb917a20db9c58844249eb0948f2f2613f4795826be43829120"
   license any_of: ["MIT", "Apache-2.0"]
-  revision 3
+  revision 4
 
   keg_only "its binaries overlap with Homebrew Core's zeroclaw package"
 
@@ -16,11 +16,13 @@ class ZeroclawPatched < Formula
   end
 
   def install
-    system "cargo", "install", *std_cargo_args
-    system "cargo", "install", *std_cargo_args(path: "apps/zerocode")
-    dashboard = bin/"web"/"dist"
+    system "cargo", "install", *std_cargo_args(root: libexec)
+    system "cargo", "install", *std_cargo_args(root: libexec, path: "apps/zerocode")
+    # The gateway discovers dashboard assets relative to the real executable.
+    dashboard = libexec/"bin/web/dist"
     dashboard.mkpath
     dashboard.install Dir["web/dist/*"]
+    bin.write_exec_script libexec/"bin/zeroclaw", libexec/"bin/zeroclaw-acp-bridge", libexec/"bin/zerocode"
   end
 
   service do
@@ -51,7 +53,8 @@ class ZeroclawPatched < Formula
   test do
     assert_match "0.8.6", shell_output("#{bin}/zeroclaw --version")
     assert_predicate bin/"zeroclaw-acp-bridge", :executable?
-    assert_path_exists bin/"web/dist/index.html"
+    assert_path_exists libexec/"bin/web/dist/index.html"
+    refute_path_exists bin/"web"
     assert_match "0.8.6", shell_output("#{bin}/zerocode --version")
   end
 end
